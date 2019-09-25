@@ -1,0 +1,22 @@
+{
+  "name": "djs-cli-tool",
+  "version": "1.0.0",
+  "description": "A simple discordjs bot generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ansonfoong/djs-cli-tool.git"
+  },
+  "author": "ansonfoong",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ansonfoong/djs-cli-tool/issues"
+  },
+  "homepage": "https://github.com/ansonfoong/djs-cli-tool#readme",
+  "dependencies": {
+    "prompts": "^2.2.1"
+  }
+}
