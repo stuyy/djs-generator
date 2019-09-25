@@ -11,11 +11,10 @@ const utils = require('./util/util');
       message: 'Which library are you using?',
       validate: lib => lib === 'djs' || lib === 'discordjs' || lib === 'discord.js' || lib == 'dpy' || lib === 'discord.py'
     });
-    const fileName = await prompts({
+    const projectName = await prompts({
         type: 'text',
         name: 'file',
-        message: 'Enter the name of the file',
-        validate: file => file.endsWith(".js") || file.endsWith(".py")
+        message: 'Enter the name of the project'
     });
 
     // Now generate the file.
@@ -23,6 +22,9 @@ const utils = require('./util/util');
     if(response.lib === 'djs') {
         console.log("Generating DiscordJS project");
         let mkdir = utils.promisify(fs.mkdir);
-        await mkdir(path.join(process.cwd(), 'src'))
+        await mkdir(path.join(process.cwd(), projectName.file))
+        await mkdir(path.join(process.cwd(), projectName.file, 'config'));
+        let copyFile = utils.promisify(fs.copyFile);
+        await copyFile(path.join(__dirname, 'templates', 'bot.js'), path.join(process.cwd(), projectName.file, 'bot.js'));
     }
 })();
