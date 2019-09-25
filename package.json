@@ -1,5 +1,5 @@
 {
-  "name": "djs-cli-tool",
+  "name": "djs-generator",
   "version": "1.0.0",
   "description": "A simple discordjs bot generator",
   "main": "index.js",
@@ -18,5 +18,8 @@
   "homepage": "https://github.com/ansonfoong/djs-cli-tool#readme",
   "dependencies": {
     "prompts": "^2.2.1"
+  },
+  "bin": {
+    "djs": "./index.js"
   }
 }
