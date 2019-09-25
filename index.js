@@ -16,6 +16,11 @@ const utils = require('./util/util');
         name: 'file',
         message: 'Enter the name of the project'
     });
+    const botToken = await prompts({
+        type: 'text',
+        name: 'token',
+        message: "Please enter your bot token"
+    });
 
     // Now generate the file.
 
@@ -26,5 +31,10 @@ const utils = require('./util/util');
         await mkdir(path.join(process.cwd(), projectName.file, 'config'));
         let copyFile = utils.promisify(fs.copyFile);
         await copyFile(path.join(__dirname, 'templates', 'bot.js'), path.join(process.cwd(), projectName.file, 'bot.js'));
+        let configObj = {
+            "token" : botToken.token
+        }
+        let writeFile = utils.promisify(fs.writeFile);
+        await writeFile(path.join(process.cwd(), projectName.file, 'config', 'config.json'), JSON.stringify(configObj));
     }
 })();
