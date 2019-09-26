@@ -36,10 +36,10 @@ module.exports.exists = async function(projectName) {
     }
 }
 
-module.exports.generateCommandTemplate = async function(options) {
+module.exports.generateCommandTemplate = async function(projectName, options) {
     const template = 
     `const commando = require('discord.js-commando');
-module.exports = class ${options.command}Command extends commando.Command {
+module.exports = class ${options.name}Command extends commando.Command {
     constructor(client) {
         super(client, {
             name: '${options.name}',
@@ -49,8 +49,17 @@ module.exports = class ${options.command}Command extends commando.Command {
         })
     }
     async run(msg) {
-        msg.channel.send("${options.command} command works!");
+        msg.channel.send("${options.name} command works!");
     }
 }`
+    // First check if the group directory exists.
     
+    let doesExist = await this.exists(path.join('commands', `${options.group}`));
+    if(doesExist) {
+        await fs.writeFile(path.join(CURRENT_DIR, 'commands', `${options.group}`, `${options.name}Command.js`), template);
+    }
+    else {
+        await fs.mkdir(path.join(CURRENT_DIR, 'commands', `${options.group}`));
+        await fs.writeFile(path.join(CURRENT_DIR, 'commands', `${options.group}`, `${options.name}Command.js`), template);
+    }
 }
