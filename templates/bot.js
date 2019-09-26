@@ -4,7 +4,7 @@ const path = require('path');
 const config = require(path.join(__dirname, 'config', 'config.json'));
 
 client.on('ready', () => {
-    console.log(`${client.user.username}#${client.user.discriminator} logged in.`);
+    console.log(client.user.username + '#' + client.user.discriminator + ' has logged in.');
 });
 
 client.on('message', message => {

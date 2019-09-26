@@ -1,5 +1,7 @@
 module.exports = {
     NEW: 'NEW',
-    GEN: 'GENERATE',
-    DEL: 'DELETE'
+    GENERATE: 'GENERATE',
+    GEN: 'GEN',
+    DEL: 'DEL',
+    DELETE: 'DELETE'
 }
