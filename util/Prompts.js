@@ -1,3 +1,5 @@
+const constants = require('./Constants');
+
 module.exports.questions = [
     {
         type: 'text',
@@ -55,3 +57,29 @@ module.exports.optionsPrompts = [
         ]
     }
 ];
+
+module.exports.commandQuestions = [
+    {
+        type: 'text',
+        name: 'command',
+        message: 'Name of command?',
+        validate: input => input.match(/\d/) ? 'Invalid Command' : true
+    },
+    {
+        type: 'text',
+        name: 'group',
+        message: 'Group of command?',
+        validate: input => input.match(/\d/) ? 'Invalid Group Name' : true
+    },
+    {
+        type: 'text',
+        name: 'memberName',
+        message: 'Member name?',
+        validate: input => input.match(/\d/) ? 'Invalid member name' : true
+    },
+    {
+        type: 'text',
+        name: 'description',
+        message: 'Please enter a description'
+    }
+]
