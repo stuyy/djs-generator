@@ -1,5 +1,9 @@
 # Discord.JS Project Generator
 
+## Installation
+
+`npm install discordjs-cli`
+
 This is a simple tool to scaffold a Discord.JS bot.
 
 
