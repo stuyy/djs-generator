@@ -8,7 +8,7 @@ const questions = [
         type: 'text',
         name: 'file',
         message: 'Enter the name of the project',
-        validate: async input => await utils.exists(input) ? true : 'Project name exists already'
+        validate: async input => !(await utils.exists(input)) ? true : 'Project name exists already'
     },
     {
         type: 'select',
@@ -36,19 +36,62 @@ const questions = [
 
 ];
 
+const optionsPrompts = [
+    {
+        type: 'select',
+        name: 'option',
+        message: 'What would you like to do?',
+        choices: [
+            {
+                title: 'New',
+                description: 'Create a new Discord Bot Project',
+                value: constants.NEW
+            },
+            {
+                title: 'Generate',
+                description: 'Generate a Command',
+                value: constants.GEN
+            },
+            {
+                title: 'Delete',
+                description: 'Delete a command',
+                value: constants.DEL
+            }
+        ]
+    }
+];
+
 (async () => {
     process.argv.shift();
     process.argv.shift();
     let args = process.argv;
     if(args.length === 0) {
-        const res = await prompts(questions);
-        await utils.generateProject(res.lib, res.file, res.framework, {
-            "token" : res.token
-        });
-        
+        const res = await prompts(optionsPrompts);
+        switch(res.option) {
+            case constants.NEW:
+                await createProject();
+                break;
+            case constants.GEN:
+                const exists = await utils.exists('djs.json');
+                if(exists) {
+                    console.log("Generating...");
+                }
+                else {
+                    console.log("You don't have a djs.json file.")
+                }
+                break;
+            case constants.DEL:
+                break;
+        }
     }
     else if(args.length === 1) {
-        console.log("Yay")
+        
     }
-
 })();
+
+async function createProject() {
+    const res = await prompts(questions);
+    await utils.generateProject(res.lib, res.file, res.framework, {
+        "token" : res.token
+    });
+}
