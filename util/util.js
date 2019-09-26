@@ -7,11 +7,9 @@ const CURRENT_DIR = process.cwd();
  * Generates a DiscordJS project. If framework is enabled, it will set the framework
  * key in djs.json to "commando". 
  */
-module.exports.generateProject = async function(type, projectName, framework, configObj) {
+module.exports.generateProject = async function(type, projectName, usingFramework, configObj) {
     if(type === 'djs') {
-        const usingFramework = framework === 'y' || framework === 'yes';
         let opts = usingFramework ? { framework: 'commando', groups: [] } : { framework: 'none' }
-
         fs.mkdir(path.join(CURRENT_DIR, projectName))
         .then(() => fs.mkdir(path.join(CURRENT_DIR, projectName, 'config'))) // Create Config Folder.
         .then(() => usingFramework ? fs.copyFile(path.join(__dirname, '..', 'templates', 'registry.js'), path.join(CURRENT_DIR, projectName, 'config', 'registry.js')) : Promise.resolve())
@@ -27,12 +25,14 @@ module.exports.generateProject = async function(type, projectName, framework, co
 
 module.exports.exists = async function(projectName) {
     let file = path.join(CURRENT_DIR, projectName);
+    console.log(file);
     try {
         const res = await fs.access(file);
-        return Promise.resolve(false); // Resolve False if project directory doesn't exist.
+        return Promise.resolve(true); // Resolve true if project directory exists.
     }
     catch(err) {
-        return Promise.resolve(true); // Resolve true if project directory doesn't exist.
+        // If fs.access throws an err, that means file doesn't exist.
+        return Promise.resolve(false); // Resolve false if project directory doesn't exist.
     }
 }
 /**
