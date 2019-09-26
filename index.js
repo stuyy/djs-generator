@@ -20,22 +20,17 @@ const utils = require('./util/util');
               { title: 'Discord.JS', description: 'NodeJS library for interacting with the Discord API', value: 'djs' },
               { title: 'discord.py', description: 'Python library for interacting with the Discord API', value: 'dpy'}
             ],
-            initial: 1
+            initial: 0
         });
+
         const confirm = await prompts({
             type: 'toggle',
             name: 'value',
-            message: response.lib === 'djs' ? 'Install Commando?' : 'Install Commands Extension?',
+            message: libraru.lib === 'djs' ? 'Install the Commando Framework?' : 'Install commands Extension?',
             initial: true,
             active: 'yes',
             inactive: 'no'
         });
-        const framework = await prompts({
-            type: 'text',
-            name: 'choice',
-            message: `Do you want to use the commands framework for ${response.lib}? (Y/N)`,
-            validate: input => input.toLowerCase() === 'y' || input.toLowerCase() === 'yes' || input.toLowerCase() === 'n' || input.toLowerCase() === 'no'
-        })
         const botToken = await prompts({
             type: 'invisible',
             name: 'token',
