@@ -3,6 +3,10 @@ const fs = require('fs').promises;
 
 const CURRENT_DIR = process.cwd();
 
+/**
+ * Generates a DiscordJS project. If framework is enabled, it will set the framework
+ * key in djs.json to "commando". 
+ */
 module.exports.generateProject = async function(type, projectName, framework, configObj) {
     if(type === 'djs') {
         let opts = {
@@ -13,12 +17,13 @@ module.exports.generateProject = async function(type, projectName, framework, co
             opts.framework = 'commando'
 
         fs.mkdir(path.join(CURRENT_DIR, projectName))
-        .then(() => fs.mkdir(path.join(CURRENT_DIR, projectName, 'config')))
-        .then(() => fs.copyFile(path.join(__dirname, '..', 'templates', 'bot.js'), path.join(CURRENT_DIR, projectName, 'bot.js')))
+        .then(() => fs.mkdir(path.join(CURRENT_DIR, projectName, 'config'))) // Create Config Folder.
+        .then(() => fs.copyFile(path.join(__dirname, '..', 'templates', 'registry.js'), path.join(CURRENT_DIR, projectName, 'config', 'registry.js')))
+        .then(() => fs.copyFile(path.join(__dirname, '..', 'templates', 'commando.js'), path.join(CURRENT_DIR, projectName, 'bot.js')))
         .then(() => fs.writeFile(path.join(CURRENT_DIR, projectName, 'config', 'config.json'), JSON.stringify(configObj, null, 4)))
         .then(() => fs.writeFile(path.join(CURRENT_DIR, projectName, 'djs.json'), JSON.stringify(opts, null, 4)))
         .then(() => fs.readFile(path.join(CURRENT_DIR, projectName, 'djs.json')))
-        .then(file => console.log(JSON.parse(file)))
+        .then(() => fs.mkdir(path.join(CURRENT_DIR, projectName, 'commands')))
         .then(() => console.log("Generated Discord.JS Project"))
         .catch(err => console.log(err));
 
@@ -39,30 +44,5 @@ module.exports.exists = async function(projectName) {
  * Generates a DJS Commando Project.
  */
 module.exports.generateCommandoProject = async function(projectName) {
-    try {
-        let res = await module.exports.exists(path.join(__dirname, projectName, 'djs.json'));
-        console.log(res);
-        console.log("Hello.")
-    }
-    catch(err) {
-        console.log(err);
-    }
-    const template = `
-        const commando = require('discord.js-commando');
-        const client = new commando.Client({});
-        const path = require('path');
-        const config = require(path.join(__dirname, 'config', 'config.json'));
-
-        client.login(config.token);
-
-        client.registry
-        .registerGroups()
-        .registerDefaults()
-        .registerCommandsIn(path.join(__dirname, 'commands'));
-
-        client.on('ready', () => {
-            console.log(client.user.username + " has logged in.");
-        })
-    `;
-
+    
 }
