@@ -69,4 +69,14 @@ module.exports = class ${options.name}Command extends commando.Command {
         await fs.mkdir(path.join(CURRENT_DIR, 'commands', `${options.group}`));
         await fs.writeFile(path.join(CURRENT_DIR, 'commands', `${options.group}`, `${options.name}Command.js`), template);
     }
+
+    let obj = JSON.parse(await this.readFile('djs.json'));
+    
+    if(obj.groups.some(el => el[0] === `${options.group}`)) {
+        console.log("Group already registered.");
+    }
+    else {
+        obj.groups.push([`${options.group}`, `${options.group} commands`]);
+        await fs.writeFile(path.join(CURRENT_DIR, 'djs.json'), JSON.stringify(obj, null, 4));
+    }
 }
