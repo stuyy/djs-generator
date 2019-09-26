@@ -67,28 +67,42 @@ const optionsPrompts = [
     let args = process.argv;
     if(args.length === 0) {
         const res = await prompts(optionsPrompts);
-        switch(res.option) {
+        checkArguments(res.option);
+    }
+    else if(args.length === 1) {
+        console.log(args[0]);
+        await checkArguments(args[0]);
+    }
+})();
+
+async function checkArguments(arg) {
+    try {
+        switch(arg.toUpperCase()) {
             case constants.NEW:
                 await createProject();
                 break;
             case constants.GEN:
+            case constants.GENERATE:
                 const exists = await utils.exists('djs.json');
                 if(exists) {
                     console.log("Generating...");
+                    // Call Generate Command Function
                 }
-                else {
-                    console.log("You don't have a djs.json file.")
-                }
+                else 
+                    throw new Error("Cannot find djs.json. Please make sure you're in your project directory.")
                 break;
             case constants.DEL:
+            case constants.DELETE:
+                console.log("Deleting...");
                 break;
+            default:
+                throw new Error("Invalid option.");
         }
     }
-    else if(args.length === 1) {
-        
+    catch(err) {
+        console.log(err)
     }
-})();
-
+}
 async function createProject() {
     const res = await prompts(questions);
     await utils.generateProject(res.lib, res.file, res.framework, {
