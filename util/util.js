@@ -35,9 +35,22 @@ module.exports.exists = async function(projectName) {
         return Promise.resolve(false); // Resolve false if project directory doesn't exist.
     }
 }
-/**
- * Generates a DJS Commando Project.
- */
-module.exports.generateCommandoProject = async function(projectName) {
+
+module.exports.generateCommandTemplate = async function(options) {
+    const template = 
+    `const commando = require('discord.js-commando');
+module.exports = class ${options.command}Command extends commando.Command {
+    constructor(client) {
+        super(client, {
+            name: '${options.name}',
+            description: '${options.description}',
+            group: '${options.group}',
+            memberName: '${options.memberName}'
+        })
+    }
+    async run(msg) {
+        msg.channel.send("${options.command} command works!");
+    }
+}`
     
 }
