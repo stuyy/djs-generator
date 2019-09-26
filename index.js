@@ -13,7 +13,6 @@ const questions = require('./util/Prompts');
         checkArguments(res.option);
     }
     else if(args.length === 1) {
-        console.log(args[0]);
         await checkArguments(args[0]);
     }
 })();
@@ -28,8 +27,7 @@ async function checkArguments(arg) {
             case constants.GENERATE:
                 const exists = await utils.exists('djs.json');
                 if(exists) {
-                    console.log("Generating...");
-                    // Call Generate Command Function
+                    await generateCommand();
                 }
                 else 
                     throw new Error("Cannot find djs.json. Please make sure you're in your project directory.")
@@ -46,9 +44,14 @@ async function checkArguments(arg) {
         console.log(err)
     }
 }
+async function generateCommand() {
+    let djsObj = JSON.parse(await utils.readFile('djs.json'));
+    const res = await prompts(questions.commandQuestions);
+    await utils.generateCommandTemplate(djsObj.project, res);
+}
 async function createProject() {
     const res = await prompts(questions.questions);
-    await utils.generateProject(res.lib, res.file, res.framework, {
+    utils.generateProject(res.lib, res.file, res.framework, {
         "token" : res.token
     });
 }
