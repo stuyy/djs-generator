@@ -1,4 +1,5 @@
 const constants = require('./Constants');
+const utils = require('./util');
 
 module.exports.questions = [
     {
@@ -61,7 +62,7 @@ module.exports.optionsPrompts = [
 module.exports.commandQuestions = [
     {
         type: 'text',
-        name: 'command',
+        name: 'name',
         message: 'Name of command?',
         validate: input => input.match(/\d/) ? 'Invalid Command' : true
     },

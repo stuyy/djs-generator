@@ -1,6 +1,6 @@
 {
-  "name": "djs-cli",
-  "version": "1.0.0",
+  "name": "discordjs-cli",
+  "version": "1.0.3",
   "description": "A simple discordjs bot generator",
   "main": "index.js",
   "scripts": {
