@@ -1,10 +1,15 @@
+const path = require('path');
+const config = require(path.join(__dirname, 'config.json'));
+const fs = require('fs').promises;
+
 module.exports = function(client) {
     // Register Events, Commands.
-    registerEvents()
-    registerCommands()
+    client.login(config.token);
+    registerEvents(client)
+    registerCommands(client)
 }
 
-function registerEvents() {
+function registerEvents(client) {
     fs.readdir(path.join(__dirname, '..', 'events'))
     .then(files => files.filter(file => file.endsWith(".js")))
     .then(files => files.forEach(file => {
@@ -15,6 +20,6 @@ function registerEvents() {
     .catch(err => console.log(err));
 }
 
-function registerCommands() {
-
+function registerCommands(client) {
+    
 }
