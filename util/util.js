@@ -19,6 +19,7 @@ module.exports.generateProject = function(type, projectName, usingFramework, con
         .then(() => fs.mkdir(path.join(CURRENT_DIR, projectName, 'commands'))) // Generate Commands Folder for both Scaffolds.
         .then(() =>  fs.mkdir(path.join(CURRENT_DIR, projectName, 'events'))) // Generate Events Folder for both Scaffolds.
         .then(() => fs.copyFile(path.join(__dirname, '..', 'templates', 'ready.js'), path.join(CURRENT_DIR, projectName, 'events', 'ready.js')))
+        .then(() => fs.copyFile(path.join(__dirname, '..', 'templates', 'message.js'), path.join(CURRENT_DIR, projectName, 'events', 'message.js')))
         .then(() => console.log("Generated Discord.JS Project"))
         .catch(err => console.log(err));
     }
