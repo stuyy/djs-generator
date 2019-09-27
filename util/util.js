@@ -16,8 +16,8 @@ module.exports.generateProject = function(type, projectName, usingFramework, con
         .then(() => usingFramework ? fs.copyFile(path.join(__dirname, '..', 'templates', 'commando.js'), path.join(CURRENT_DIR, projectName, 'bot.js')) : fs.copyFile(path.join(__dirname, '..', 'templates', 'bot.js'), path.join(CURRENT_DIR, projectName, 'bot.js')))
         .then(() => fs.writeFile(path.join(CURRENT_DIR, projectName, 'config', 'config.json'), JSON.stringify(configObj, null, 4)))
         .then(() => fs.writeFile(path.join(CURRENT_DIR, projectName, 'djs.json'), JSON.stringify(opts, null, 4)))
-        .then(() => fs.readFile(path.join(CURRENT_DIR, projectName, 'djs.json')))
-        .then(() => usingFramework ? fs.mkdir(path.join(CURRENT_DIR, projectName, 'commands')) : Promise.resolve())
+        .then(() => fs.mkdir(path.join(CURRENT_DIR, projectName, 'commands'))) // Generate Commands Folder for both Scaffolds.
+        .then(() =>  fs.mkdir(path.join(CURRENT_DIR, projectName, 'events'))) // Generate Events Folder for both Scaffolds.
         .then(() => console.log("Generated Discord.JS Project"))
         .catch(err => console.log(err));
     }
@@ -45,10 +45,10 @@ module.exports.generateCommandTemplate = async function(projectName, options) {
 module.exports = class ${options.name}Command extends commando.Command {
     constructor(client) {
         super(client, {
-            name: '${options.name}',
+            name: '${options.name.toLowerCase()}',
             description: '${options.description}',
-            group: '${options.group}',
-            memberName: '${options.memberName}'
+            group: '${options.group.toLowerCase()}',
+            memberName: '${options.memberName.toLowerCase()}'
         })
     }
     async run(msg) {
