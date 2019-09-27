@@ -14,7 +14,7 @@ module.exports.questions = [
         message: 'Which library are you using?',
         choices: [
           { title: 'Discord.JS', description: 'NodeJS library for interacting with the Discord API', value: 'djs' },
-          { title: 'discord.py', description: 'Python library for interacting with the Discord API', value: 'dpy'}
+          { title: 'discord.py', description: 'Python library for interacting with the Discord API', value: 'dpy' }
         ],
         initial: 0
     },

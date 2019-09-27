@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/ansonfoong/djs-cli-tool.git"
   },
-  "author": "ansonfoong",
+  "author": "Anson Foong",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/ansonfoong/djs-cli-tool/issues"
