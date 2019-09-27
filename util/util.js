@@ -27,7 +27,7 @@ async function copyTemplates(opts) {
     try {
         await fs.copyFile(path.join(__dirname, '..', 'templates', 'ready.js'), path.join(CURRENT_DIR, opts.projectName, 'events', 'ready.js'));
         await fs.copyFile(path.join(__dirname, '..', 'templates', 'message.js'), path.join(CURRENT_DIR, opts.projectName, 'events', 'message.js'));
-        opts.usingFramework ? await fs.copyFile(path.join(__dirname, '..', 'templates', 'registry.js'), path.join(CURRENT_DIR, opts.projectName, 'config', 'registry.js')) : true
+        opts.usingFramework ? await fs.copyFile(path.join(__dirname, '..', 'templates', 'registry.js'), path.join(CURRENT_DIR, opts.projectName, 'config', 'registry.js')) : await fs.copyFile(path.join(__dirname, '..', 'templates', 'mainregistry.js'), path.join(CURRENT_DIR, opts.projectName, 'config', 'registry.js'))
         opts.usingFramework ? fs.copyFile(path.join(__dirname, '..', 'templates', 'commando.js'), path.join(CURRENT_DIR, opts.projectName, 'bot.js')) : fs.copyFile(path.join(__dirname, '..', 'templates', 'bot.js'), path.join(CURRENT_DIR, opts.projectName, 'bot.js'));
         console.log("Copied templates...");
     }
@@ -68,6 +68,7 @@ module.exports = class ${options.name}Command extends commando.Command {
         msg.channel.send("${options.name} command works!");
     }
 }`
+    
     // First check if the group directory exists.
     let doesExist = await this.exists(path.join('commands', `${options.group}`));
     if(doesExist) {
