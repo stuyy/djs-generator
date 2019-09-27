@@ -52,6 +52,7 @@ async function generateCommand() {
 async function createProject() {
     const res = await prompts(questions.questions);
     utils.generateProject(res.lib, res.file, res.framework, {
-        "token" : res.token
+        "token" : res.token,
+        "prefix" : "!"
     });
 }
