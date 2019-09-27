@@ -21,5 +21,14 @@ function registerEvents(client) {
 }
 
 function registerCommands(client) {
-    
+    client.commands = new Map();
+    fs.readdir(path.join(__dirname, '..', 'commands'))
+    .then(files => files.filter(file => file.endsWith(".js")))
+    .then(files => files.forEach(file => {
+        let cmdName = file.substring(0, file.indexOf(".js"));
+        let cmdModule = require(path.join(__dirname, '..', 'commands', file));
+        console.log("Registering " + cmdName + " command.");
+        client.commands.set(cmdName, cmdModule);
+    }))
+    .catch(err => console.log(err));
 }
