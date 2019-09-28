@@ -83,4 +83,24 @@ module.exports.commandQuestions = [
         name: 'description',
         message: 'Please enter a description'
     }
+];
+
+module.exports.generate = [
+    {
+        type: 'select',
+        name: 'option',
+        message: 'What would you like to generate?',
+        choices: [
+            {
+                title: 'Command',
+                description: 'Generate a new text command',
+                value: constants.COMMAND
+            },
+            {
+                title: 'Event',
+                description: 'Generate a new event handler',
+                value: constants.EVENT
+            }
+        ]
+    }
 ]
