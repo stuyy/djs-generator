@@ -93,10 +93,8 @@ module.exports.generateCommandTemplate = async function(projectName, options) {
 
     let obj = JSON.parse(await this.readFile('djs.json'));
     
-    if(obj.groups.some(el => el[0] === `${options.group}`)) {
-        console.log("Group already registered.");
-    }
-    else {
+    if(!obj.groups.some(el => el[0] === `${options.group}`)) {
+        
         obj.groups.push([`${options.group}`, `${options.group} commands`]);
         await fs.writeFile(path.join(CURRENT_DIR, 'djs.json'), JSON.stringify(obj, null, 4));
     }
