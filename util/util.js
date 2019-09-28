@@ -77,16 +77,18 @@ module.exports.generateCommandTemplate = async function(projectName, options) {
     // First check if the group directory exists.
     let doesExist = await this.exists(path.join('commands', `${options.group}`));
     if(doesExist) {
-        let cmdExist = await this.exists(path.join('commands', `${options.group}`, `${options.name}Command.js`));
+        let cmdExist = options.framework ? await this.exists(path.join('commands', `${options.group}`, `${options.name}Command.js`)) : await this.exists(path.join('commands', `${options.group}`, `${options.name}.js`));
         if(!cmdExist) {
-            await fs.writeFile(path.join(CURRENT_DIR, 'commands', `${options.group}`, `${options.name}Command.js`), template);
+            options.framework ? await fs.writeFile(path.join(CURRENT_DIR, 'commands', `${options.group}`, `${options.name}Command.js`), template) : fs.writeFile(path.join(CURRENT_DIR, 'commands', `${options.group}`, `${options.name}.js`), template);
         } else {
             throw new Error("Command already exists under that group.");
         }
     }
     else {
+        // Create group name regardless of scaffold.
         await fs.mkdir(path.join(CURRENT_DIR, 'commands', `${options.group}`));
-        await fs.writeFile(path.join(CURRENT_DIR, 'commands', `${options.group}`, `${options.name}Command.js`), template);
+        // Create template name based on scaffold
+        options.framework ? await fs.writeFile(path.join(CURRENT_DIR, 'commands', `${options.group}`, `${options.name}Command.js`), template) : await fs.writeFile(path.join(CURRENT_DIR, 'commands', `${options.group}`, `${options.name}.js`), template)
     }
 
     let obj = JSON.parse(await this.readFile('djs.json'));
