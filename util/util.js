@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const templates = require(path.join(__dirname, 'Templates'));
 const CURRENT_DIR = process.cwd();
-
+const constants = require('./Constants');
 /**
  * Generates a DiscordJS project. If framework is enabled, it will set the framework
  * key in djs.json to "commando". 
@@ -47,6 +47,18 @@ async function copyTemplates(opts) {
     }
 }
 
+module.exports.addEventHandler = async function(events) {
+    await asyncForEach(events, fs.writeFile);
+}
+
+async function asyncForEach(arr, cb) {
+    for (let i = 0; i < arr.length; i++) {
+        if(constants.EVENT_TEMPLATES.hasOwnProperty(arr[i]))
+        {
+            await cb(path.join(CURRENT_DIR, 'events', `${arr[i]}.js`), constants.EVENT_TEMPLATES[arr[i]]);
+        }
+    }
+}
 module.exports.exists = async function(filename) {
     let file = path.join(CURRENT_DIR, filename);
     try {
