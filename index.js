@@ -54,7 +54,7 @@ async function generateCommand(framework) {
     await utils.generateCommandTemplate(djsObj.project, res);
 }
 async function createProject() {
-    const res = await prompts(questions.questions);
+    const res = await prompts(questions.questions, { onCancel: (prompt, answers) => process.exit(1)});
     utils.generateProject(res.lib, res.file, res.framework, {
         "token" : res.token,
         "prefix" : "!"
