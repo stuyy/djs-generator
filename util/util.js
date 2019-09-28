@@ -54,7 +54,6 @@ module.exports.readFile = async function(file) {
 }
 
 module.exports.generateCommandTemplate = async function(projectName, options) {
-    console.log(options)
     const template = templates.generateCommand(options);
     // First check if the group directory exists.
     let doesExist = await this.exists(path.join('commands', `${options.group}`));

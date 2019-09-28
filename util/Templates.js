@@ -1,6 +1,6 @@
 module.exports.generateCommand = (options) => {
-    return options.framework ? `
-const commando = require('discord.js-commando');
+    return options.framework ? 
+`const commando = require('discord.js-commando');
 module.exports = class ${options.name}Command extends commando.Command {
     constructor(client) {
         super(client, {
@@ -14,8 +14,7 @@ module.exports = class ${options.name}Command extends commando.Command {
         msg.channel.send("${options.name} command works!");
     }
 }` :
-`
-module.exports.run = (client, message, args) => {
+`module.exports.run = (client, message, args) => {
     message.channel.send('${options.name} command works')
 }
 `;

@@ -28,7 +28,9 @@ async function checkArguments(arg) {
                 const exists = await utils.exists('djs.json');
                 if(exists) {
                     const file = await utils.readFile('djs.json');
-                    await generateCommand(file.framework);
+                    let fileObj = JSON.parse(file);
+                    
+                    await generateCommand(fileObj.framework);
                 }
                 else 
                     throw new Error("Cannot find djs.json. Please make sure you're in your project directory.")
@@ -48,6 +50,7 @@ async function checkArguments(arg) {
 async function generateCommand(framework) {
     let djsObj = JSON.parse(await utils.readFile('djs.json'));
     const res = await prompts(questions.commandQuestions);
+    res['framework'] = framework;
     await utils.generateCommandTemplate(djsObj.project, res);
 }
 async function createProject() {

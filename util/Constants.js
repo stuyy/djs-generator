@@ -3,5 +3,7 @@ module.exports = {
     GENERATE: 'GENERATE',
     GEN: 'GEN',
     DEL: 'DEL',
-    DELETE: 'DELETE'
+    DELETE: 'DELETE',
+    COMMAND: 'COMMAND',
+    EVENT: 'EVENT'
 }
