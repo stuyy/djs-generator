@@ -25,15 +25,22 @@ async function checkArguments(arg) {
                 break;
             case constants.GEN:
             case constants.GENERATE:
+                let res = await prompts(questions.generate, { onCancel: () => process.exit(1)});
                 const exists = await utils.exists('djs.json');
-                if(exists) {
-                    const file = await utils.readFile('djs.json');
-                    let fileObj = JSON.parse(file);
-                    
+                if(!exists) throw new Error("Cannot find djs.json. Please make sure you're in your project directory.");
+
+                let file = await utils.readFile('djs.json');
+                let fileObj = JSON.parse(file);
+
+                if(res.option === constants.COMMAND) {
                     await generateCommand(fileObj.framework);
+                        
                 }
-                else 
-                    throw new Error("Cannot find djs.json. Please make sure you're in your project directory.")
+                else if(res.option === constants.EVENT) {
+                    // Generate Event.
+                    await addEventHandler();
+                }
+                
                 break;
             case constants.DEL:
             case constants.DELETE:
@@ -46,6 +53,10 @@ async function checkArguments(arg) {
     catch(err) {
         console.log(err)
     }
+}
+
+async function addEventHandler() {
+
 }
 async function generateCommand(framework) {
     let djsObj = JSON.parse(await utils.readFile('djs.json'));
