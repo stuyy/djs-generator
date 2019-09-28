@@ -19,20 +19,6 @@ function registerEvents(client) {
     }))
     .catch(err => console.log(err));
 }
-/*
-function registerCommands(client) {
-    client.commands = new Map();
-    fs.readdir(path.join(__dirname, '..', 'commands'))
-    .then(files => files.filter(file => file.endsWith(".js")))
-    .then(files => files.forEach(file => {
-        let cmdName = file.substring(0, file.indexOf(".js"));
-        let cmdModule = require(path.join(__dirname, '..', 'commands', file));
-        console.log("Registering " + cmdName + " command.");
-        client.commands.set(cmdName, cmdModule);
-    }))
-    .catch(err => console.log(err));
-} */
-
 function registerCommands(client) { 
     client.commands = new Map();
     recurDir(client, 'commands')
@@ -51,7 +37,6 @@ async function recurDir(client, curr) {
 Array.prototype.forEachAsync = async function(client, dirs, currDir, cb) {
     for (let i = 0; i < dirs.length; i++) {
         // Call fs.lstat.
-        console.log("CURRENT FILE: " + dirs[i])
         let curr = await cb(path.join(__dirname, '..', currDir, dirs[i]), i, dirs);
         // If the file is a directory, call readRecur.
         if(curr.isDirectory()) 
@@ -60,9 +45,7 @@ Array.prototype.forEachAsync = async function(client, dirs, currDir, cb) {
         {
             let cmdName = dirs[i].substring(0, dirs[i].indexOf(".js"));
             let cmdModule = require(path.join(__dirname, '..', currDir, dirs[i]));
-            console.log(cmdName);
-            console.log(cmdModule);
-            client.commands.set(cmdName, cmdModule);
+            client.commands.set(cmdName.toLowerCase(), cmdModule);
         }
     }
 };
