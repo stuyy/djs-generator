@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs').promises;
-
+const templates = require(path.join(__dirname, 'Templates'));
 const CURRENT_DIR = process.cwd();
 
 /**
@@ -9,7 +9,7 @@ const CURRENT_DIR = process.cwd();
  */
 module.exports.generateProject = function(type, projectName, usingFramework, configObj) {
     if(type === 'djs') {
-        let opts = usingFramework ? { project: projectName, framework: true, groups: [] } : { project: projectName, framework: false }
+        let opts = usingFramework ? { project: projectName, framework: true, groups: [] } : { project: projectName, framework: false, groups: [] }
         fs.mkdir(path.join(CURRENT_DIR, projectName))
         .then(() => fs.mkdir(path.join(CURRENT_DIR, projectName, 'config'))) // Create Config Folder.
         .then(() => fs.writeFile(path.join(CURRENT_DIR, projectName, 'config', 'config.json'), JSON.stringify(configObj, null, 4)))
@@ -54,22 +54,8 @@ module.exports.readFile = async function(file) {
 }
 
 module.exports.generateCommandTemplate = async function(projectName, options) {
-    const template = 
-    `const commando = require('discord.js-commando');
-module.exports = class ${options.name}Command extends commando.Command {
-    constructor(client) {
-        super(client, {
-            name: '${options.name.toLowerCase()}',
-            description: '${options.description}',
-            group: '${options.group.toLowerCase()}',
-            memberName: '${options.memberName.toLowerCase()}'
-        })
-    }
-    async run(msg) {
-        msg.channel.send("${options.name} command works!");
-    }
-}`
-    
+    console.log(options)
+    const template = templates.generateCommand(options);
     // First check if the group directory exists.
     let doesExist = await this.exists(path.join('commands', `${options.group}`));
     if(doesExist) {
