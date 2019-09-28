@@ -48,14 +48,19 @@ async function copyTemplates(opts) {
 }
 
 module.exports.addEventHandler = async function(events) {
-    await asyncForEach(events, fs.writeFile);
+    await asyncForEach(events, fs.writeFile, fs.access);
 }
 
-async function asyncForEach(arr, cb) {
+async function asyncForEach(arr, writeFile, access) {
     for (let i = 0; i < arr.length; i++) {
         if(constants.EVENT_TEMPLATES.hasOwnProperty(arr[i]))
         {
-            await cb(path.join(CURRENT_DIR, 'events', `${arr[i]}.js`), constants.EVENT_TEMPLATES[arr[i]]);
+            try {
+                await access(path.join(CURRENT_DIR, 'events', `${arr[i]}.js`));
+            }
+            catch(err) {
+                await writeFile(path.join(CURRENT_DIR, 'events', `${arr[i]}.js`), constants.EVENT_TEMPLATES[arr[i]]);
+            }
         }
     }
 }
