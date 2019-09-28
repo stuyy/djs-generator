@@ -37,10 +37,13 @@ async function copyTemplates(opts) {
         opts.usingFramework ? await fs.mkdir(path.join(CURRENT_DIR, opts.projectName, 'commands', 'test')) : false
         // Copy test command depending on which scaffold user chooses.
         opts.usingFramework ? await fs.copyFile(path.join(__dirname, '..', 'templates', 'sample_commands', 'commando-test.js'), path.join(CURRENT_DIR, opts.projectName, 'commands', 'test', 'test.js')) : await fs.copyFile(path.join(__dirname, '..', 'templates', 'sample_commands', 'test.js'), path.join(CURRENT_DIR, opts.projectName, 'commands', 'test.js'))
-        console.log("Copied templates...");
+        
     }
     catch(err) {
         console.log(err);
+    }
+    finally {
+        console.log("Copied templates...");
     }
 }
 
@@ -56,6 +59,15 @@ module.exports.exists = async function(filename) {
     }
 }
 
+module.exports.rmdir = async function(file) {
+    try {
+        let del = await fs.rmdir(path.join(CURRENT_DIR, file));
+        console.log(del)
+    }
+    catch(err) {
+        console.log(err);
+    }
+}
 module.exports.readFile = async function(file) {
     return await fs.readFile(path.join(CURRENT_DIR, file), 'utf8');
 }
