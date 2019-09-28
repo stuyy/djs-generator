@@ -38,7 +38,8 @@ async function checkArguments(arg) {
                 }
                 else if(res.option === constants.EVENT) {
                     // Generate Event.
-                    await addEventHandler();
+                    let res = await prompts(questions.event);
+                    await utils.addEventHandler(res.events);
                 }
                 
                 break;
@@ -46,7 +47,9 @@ async function checkArguments(arg) {
             case constants.DELETE:
                 console.log("Deleting...");
                 break;
-            default:
+            case constants.HELP:
+
+                default:
                 throw new Error("Invalid option.");
         }
     }
@@ -55,9 +58,6 @@ async function checkArguments(arg) {
     }
 }
 
-async function addEventHandler() {
-
-}
 async function generateCommand(framework) {
     let djsObj = JSON.parse(await utils.readFile('djs.json'));
     const res = await prompts(questions.commandQuestions);
