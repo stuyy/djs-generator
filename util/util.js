@@ -9,7 +9,7 @@ const CURRENT_DIR = process.cwd();
  */
 module.exports.generateProject = function(type, projectName, usingFramework, configObj) {
     if(type === 'djs') {
-        let opts = usingFramework ? { project: projectName, framework: true, groups: [] } : { project: projectName, framework: false, groups: [] }
+        let opts = usingFramework ? { project: projectName, framework: true, groups: [['test', 'test command']] } : { project: projectName, framework: false, groups: [] }
         fs.mkdir(path.join(CURRENT_DIR, projectName))
         .then(() => fs.mkdir(path.join(CURRENT_DIR, projectName, 'config'))) // Create Config Folder.
         .then(() => fs.writeFile(path.join(CURRENT_DIR, projectName, 'config', 'config.json'), JSON.stringify(configObj, null, 4)))
@@ -25,11 +25,18 @@ module.exports.generateProject = function(type, projectName, usingFramework, con
 async function copyTemplates(opts) {
 
     try {
+        // Copy ready.js event to both scaffolds
         await fs.copyFile(path.join(__dirname, '..', 'templates', 'ready.js'), path.join(CURRENT_DIR, opts.projectName, 'events', 'ready.js'));
-        await fs.copyFile(path.join(__dirname, '..', 'templates', 'message.js'), path.join(CURRENT_DIR, opts.projectName, 'events', 'message.js'));
+        opts.usingFramework ? false : await fs.copyFile(path.join(__dirname, '..', 'templates', 'message.js'), path.join(CURRENT_DIR, opts.projectName, 'events', 'message.js'));
+        // Copy registry files depending on which scaffold
         opts.usingFramework ? await fs.copyFile(path.join(__dirname, '..', 'templates', 'registry.js'), path.join(CURRENT_DIR, opts.projectName, 'config', 'registry.js')) : await fs.copyFile(path.join(__dirname, '..', 'templates', 'mainregistry.js'), path.join(CURRENT_DIR, opts.projectName, 'config', 'registry.js'));
+        // Copy main template based on which scaffold
         opts.usingFramework ? fs.copyFile(path.join(__dirname, '..', 'templates', 'commando.js'), path.join(CURRENT_DIR, opts.projectName, 'bot.js')) : fs.copyFile(path.join(__dirname, '..', 'templates', 'bot.js'), path.join(CURRENT_DIR, opts.projectName, 'bot.js'));
-        await fs.copyFile(path.join(__dirname, '..', 'templates', 'sample_commands', 'test.js'), path.join(CURRENT_DIR, opts.projectName, 'commands', 'test.js'));
+        // Copy commands based on which scaffold user uses.
+        // If user is using framework, create the test subdir for commands dir.
+        opts.usingFramework ? await fs.mkdir(path.join(CURRENT_DIR, opts.projectName, 'commands', 'test')) : false
+        // Copy test command depending on which scaffold user chooses.
+        opts.usingFramework ? await fs.copyFile(path.join(__dirname, '..', 'templates', 'sample_commands', 'commando-test.js'), path.join(CURRENT_DIR, opts.projectName, 'commands', 'test', 'test.js')) : await fs.copyFile(path.join(__dirname, '..', 'templates', 'sample_commands', 'test.js'), path.join(CURRENT_DIR, opts.projectName, 'commands', 'test.js'))
         console.log("Copied templates...");
     }
     catch(err) {
