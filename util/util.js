@@ -9,7 +9,19 @@ const constants = require('./Constants');
  */
 module.exports.generateProject = function(type, projectName, usingFramework, configObj) {
     if(type === 'djs') {
-        let opts = usingFramework ? { project: projectName, framework: true, groups: [['test', 'test command']] } : { project: projectName, framework: false, groups: [] }
+        let opts = usingFramework ? 
+        { 
+            project: projectName, 
+            framework: true, 
+            groups: [['test', 'test command']],
+            events: [] 
+        } : 
+        { 
+            project: projectName, 
+            framework: false, 
+            groups: [["test", "test command"]], 
+            events: [] 
+        }
         fs.mkdir(path.join(CURRENT_DIR, projectName))
         .then(() => fs.mkdir(path.join(CURRENT_DIR, projectName, 'config'))) // Create Config Folder.
         .then(() => fs.writeFile(path.join(CURRENT_DIR, projectName, 'config', 'config.json'), JSON.stringify(configObj, null, 4)))
@@ -47,11 +59,11 @@ async function copyTemplates(opts) {
     }
 }
 
-module.exports.addEventHandler = async function(events) {
-    await asyncForEach(events, fs.writeFile, fs.access);
+module.exports.addEventHandler = async function(events, fileObj) {
+    await asyncForEach(events, fs.writeFile, fs.access, fileObj);
 }
 
-async function asyncForEach(arr, writeFile, access) {
+async function asyncForEach(arr, writeFile, access, fileObj) {
     for (let i = 0; i < arr.length; i++) {
         if(constants.EVENT_TEMPLATES.hasOwnProperty(arr[i]))
         {

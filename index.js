@@ -39,7 +39,7 @@ async function checkArguments(arg) {
                 else if(res.option === constants.EVENT) {
                     // Generate Event.
                     let res = await prompts(questions.event);
-                    await utils.addEventHandler(res.events);
+                    await utils.addEventHandler(res.events, fileObj);
                 }
                 
                 break;
@@ -48,7 +48,6 @@ async function checkArguments(arg) {
                 console.log("Deleting...");
                 break;
             case constants.HELP:
-
                 default:
                 throw new Error("Invalid option.");
         }
