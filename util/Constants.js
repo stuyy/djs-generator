@@ -6,7 +6,9 @@ module.exports = {
     DELETE: 'DELETE',
     COMMAND: 'COMMAND',
     EVENT: 'EVENT',
-    HELP: 'HELP'
+    HELP: 'HELP',
+    PROJECT: 'PROJECT',
+    DEFAULT: 'DEFAULT'
 };
 
 module.exports.EVENTS = {
