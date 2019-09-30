@@ -159,4 +159,24 @@ module.exports.event = [
         ],
         hint: '- Space to select. Return to submit'
     }
+];
+
+module.exports.delete = [
+    {
+        type: 'select',
+        name: 'option',
+        message: 'What would you like to delete?',
+        choices: [
+            {
+                title: 'Command',
+                description: 'Delete a text command',
+                value: constants.COMMAND
+            },
+            {
+                title: 'Event',
+                description: 'Delete an event handler',
+                value: constants.EVENT
+            }
+        ]
+    }
 ]
