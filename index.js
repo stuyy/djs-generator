@@ -4,9 +4,7 @@ const constants = require('./util/Constants');
 const prompt = require('./util/Prompts').prompt;
 
 (async () => {
-    process.argv.shift();
-    process.argv.shift();
-    let args = process.argv;
+    let args = process.argv.slice(2);
     if(args.length === 0) {
         let res = await prompt(constants.DEFAULT);
         checkArguments(res.option);
@@ -14,16 +12,17 @@ const prompt = require('./util/Prompts').prompt;
     else if(args.length === 1) {
         await checkArguments(args[0]);
     }
-    else {
-        
-    }
 })();
 
 async function checkArguments(arg) {
     try {
         switch(arg.toUpperCase()) {
             case constants.NEW:
-                await createProject();
+                let response = await prompt(constants.NEW);
+                utils.generateProject(response.lib, response.file, response.framework, {
+                    "token" : response.token,
+                    "prefix" : "!"
+                });
                 break;
             case constants.GEN:
             case constants.GENERATE:
@@ -59,8 +58,7 @@ async function checkArguments(arg) {
 
 
                 break;
-            case constants.HELP:
-                default:
+            default:
                 throw new Error("Invalid option.");
         }
     }
@@ -74,12 +72,4 @@ async function generateCommand(framework) {
     const res = await prompt(constants.COMMAND)
     res['framework'] = framework;
     await utils.generateCommandTemplate(djsObj.project, res);
-}
-async function createProject() {
-    console.log("yo")
-    const res = prompt(constants.NEW);
-    utils.generateProject(res.lib, res.file, res.framework, {
-        "token" : res.token,
-        "prefix" : "!"
-    });
 }
