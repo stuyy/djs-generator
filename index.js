@@ -15,6 +15,9 @@ const questions = require('./util/Prompts');
     else if(args.length === 1) {
         await checkArguments(args[0]);
     }
+    else {
+        
+    }
 })();
 
 async function checkArguments(arg) {
@@ -25,9 +28,9 @@ async function checkArguments(arg) {
                 break;
             case constants.GEN:
             case constants.GENERATE:
-                let res = await prompts(questions.generate, { onCancel: () => process.exit(1)});
                 const exists = await utils.exists('djs.json');
                 if(!exists) throw new Error("Cannot find djs.json. Please make sure you're in your project directory.");
+                let res = await prompts(questions.generate, { onCancel: () => process.exit(1)});
 
                 let file = await utils.readFile('djs.json');
                 let fileObj = JSON.parse(file);
