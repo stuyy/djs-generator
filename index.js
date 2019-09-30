@@ -1,15 +1,14 @@
 #!/usr/bin/env node
-const prompts = require('prompts');
 const utils = require('./util/util');
 const constants = require('./util/Constants');
-const questions = require('./util/Prompts');
+const prompt = require('./util/Prompts').prompt;
 
 (async () => {
     process.argv.shift();
     process.argv.shift();
     let args = process.argv;
     if(args.length === 0) {
-        const res = await prompts(questions.optionsPrompts);
+        let res = await prompt(constants.DEFAULT);
         checkArguments(res.option);
     }
     else if(args.length === 1) {
@@ -30,7 +29,7 @@ async function checkArguments(arg) {
             case constants.GENERATE:
                 const exists = await utils.exists('djs.json');
                 if(!exists) throw new Error("Cannot find djs.json. Please make sure you're in your project directory.");
-                let res = await prompts(questions.generate, { onCancel: () => process.exit(1)});
+                let res = await prompt(constants.GEN);
 
                 let file = await utils.readFile('djs.json');
                 let fileObj = JSON.parse(file);
@@ -41,14 +40,24 @@ async function checkArguments(arg) {
                 }
                 else if(res.option === constants.EVENT) {
                     // Generate Event.
-                    let res = await prompts(questions.event);
+                    let res = await prompt(constants.EVENT)
                     await utils.addEventHandler(res.events, fileObj);
                 }
                 
                 break;
             case constants.DEL:
             case constants.DELETE:
-                console.log("Deleting...");
+                let djsExists = await utils.exists('djs.json')
+                if(djsExists) {
+                    let response = await prompt(constants.DEL)
+                    console.log(response)
+                    // Display all of the user's commands.
+                }
+                else {
+                    throw new Error("djs.json not found");
+                }
+
+
                 break;
             case constants.HELP:
                 default:
@@ -62,12 +71,13 @@ async function checkArguments(arg) {
 
 async function generateCommand(framework) {
     let djsObj = JSON.parse(await utils.readFile('djs.json'));
-    const res = await prompts(questions.commandQuestions);
+    const res = await prompt(constants.COMMAND)
     res['framework'] = framework;
     await utils.generateCommandTemplate(djsObj.project, res);
 }
 async function createProject() {
-    const res = await prompts(questions.questions, { onCancel: (prompt, answers) => process.exit(1)});
+    console.log("yo")
+    const res = prompt(constants.NEW);
     utils.generateProject(res.lib, res.file, res.framework, {
         "token" : res.token,
         "prefix" : "!"
