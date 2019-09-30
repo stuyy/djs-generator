@@ -1,8 +1,8 @@
 const path = require('path');
 const fs = require('fs').promises;
 const templates = require(path.join(__dirname, 'Templates'));
-const CURRENT_DIR = process.cwd();
-const constants = require('./Constants');
+const CURRENT_DIR = process.cwd(); // Get the current directory from where the user issued the command
+const constants = require(path.join(__dirname, 'Constants'));
 /**
  * Generates a DiscordJS project. If framework is enabled, it will set the framework
  * key in djs.json to "commando". 
@@ -127,4 +127,21 @@ module.exports.generateCommandTemplate = async function(projectName, options) {
         obj.groups.push([`${options.group}`, `${options.group} commands`]);
         await fs.writeFile(path.join(CURRENT_DIR, 'djs.json'), JSON.stringify(obj, null, 4));
     }
+}
+
+module.exports.delete = async function(project, options) {
+
+}
+
+/**
+ * Read all commands from the commands folder and return an array of commands.
+ */
+module.exports.getRegisteredCommands = async function() {
+
+}
+/**
+ * Read all events from the events folder and return an array of events.
+ */
+module.exports.getRegisteredEvents = async function() {
+
 }
