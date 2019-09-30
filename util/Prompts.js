@@ -1,7 +1,8 @@
 const constants = require('./Constants');
 const utils = require('./util');
+const prompts = require('prompts');
 
-module.exports.questions = [
+var newProjectPrompt = [
     {
         type: 'text',
         name: 'file',
@@ -34,7 +35,7 @@ module.exports.questions = [
 
 ];
 
-module.exports.optionsPrompts = [
+var defaultPrompt = [
     {
         type: 'select',
         name: 'option',
@@ -59,7 +60,48 @@ module.exports.optionsPrompts = [
     }
 ];
 
-module.exports.commandQuestions = [
+var generatePrompt = [
+    {
+        type: 'select',
+        name: 'option',
+        message: 'What would you like to generate?',
+        choices: [
+            {
+                title: 'Command',
+                description: 'Generate a new text command',
+                value: constants.COMMAND
+            },
+            {
+                title: 'Event',
+                description: 'Generate a new event handler',
+                value: constants.EVENT
+            }
+        ]
+    }
+];
+
+
+var deletePrompt = [
+    {
+        type: 'select',
+        name: 'option',
+        message: 'What would you like to delete?',
+        choices: [
+            {
+                title: 'Command',
+                description: 'Delete a text command',
+                value: constants.COMMAND
+            },
+            {
+                title: 'Event',
+                description: 'Delete an event handler',
+                value: constants.EVENT
+            }
+        ]
+    }
+];
+
+var commandQuestions = [
     {
         type: 'text',
         name: 'name',
@@ -84,27 +126,7 @@ module.exports.commandQuestions = [
         message: 'Please enter a description'
     }
 ];
-
-module.exports.generate = [
-    {
-        type: 'select',
-        name: 'option',
-        message: 'What would you like to generate?',
-        choices: [
-            {
-                title: 'Command',
-                description: 'Generate a new text command',
-                value: constants.COMMAND
-            },
-            {
-                title: 'Event',
-                description: 'Generate a new event handler',
-                value: constants.EVENT
-            }
-        ]
-    }
-];
-module.exports.event = [
+var eventPrompt = [
     {
         type: 'autocompleteMultiselect',
         name: 'events',
@@ -161,22 +183,34 @@ module.exports.event = [
     }
 ];
 
-module.exports.delete = [
-    {
-        type: 'select',
-        name: 'option',
-        message: 'What would you like to delete?',
-        choices: [
-            {
-                title: 'Command',
-                description: 'Delete a text command',
-                value: constants.COMMAND
-            },
-            {
-                title: 'Event',
-                description: 'Delete an event handler',
-                value: constants.EVENT
-            }
-        ]
+module.exports.prompt = async function(option) {
+    switch(option) {
+        case constants.DEFAULT:
+            return await prompts(defaultPrompt, { onCancel: () => process.exit(1)});
+            break;
+        case constants.PROJECT:
+        case constants.NEW:
+            return await prompts(newProjectPrompt);
+            break;
+        case constants.GENERATE:
+        case constants.GEN:
+            return await prompts(generatePrompt);
+            break;
+        case constants.DELETE:
+        case constants.DEL:
+            return await prompts(deletePrompt);
+            break;
+        case constants.COMMAND:
+            return await prompts(commandQuestions);
+            break;
+        case constants.EVENT:
+            return await prompts(eventPrompt);
+            break;
+        default:
+            break;
     }
-]
+}
+
+
+
+
