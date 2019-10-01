@@ -9,17 +9,11 @@ const constants = require('./Constants');
  */
 module.exports.generateProject = function(type, projectName, usingFramework, configObj) {
     if(type === 'djs') {
-        let opts = usingFramework ? 
+        let opts = 
         { 
             project: projectName, 
-            framework: true, 
+            framework: usingFramework, 
             groups: [['test', 'test command']],
-            events: [] 
-        } : 
-        { 
-            project: projectName, 
-            framework: false, 
-            groups: [["test", "test command"]], 
             events: [] 
         }
         fs.mkdir(path.join(CURRENT_DIR, projectName))
