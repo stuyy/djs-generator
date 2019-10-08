@@ -211,6 +211,22 @@ module.exports.prompt = async function(option) {
     }
 }
 
+var cmdPrompt = {
+    type: 'select',
+    message: 'Which command would you like to delete?',
+    choices: [
 
-
-
+    ]
+}
+module.exports.displayCommandsPrompt = async function(cmds) {
+    cmds.forEach(cmd => {
+        let cmdName = cmd.substr(0, cmd.indexOf(".js"));
+        console.log(cmdName);
+        let obj = {
+            title: cmdName,
+            value: cmd
+        }
+        cmdPrompt.choices.push(obj);
+    });
+    await prompts(cmdPrompt);
+}

@@ -2,7 +2,7 @@
 const utils = require('./util/util');
 const constants = require('./util/Constants');
 const prompt = require('./util/Prompts').prompt;
-
+const displayCommand = require('./util/Prompts').displayCommandsPrompt;
 (async () => {
     let args = process.argv.slice(2);
     if(args.length === 0) {
@@ -35,11 +35,12 @@ async function checkArguments(arg) {
 
                 if(res.option === constants.COMMAND) {
                     await generateCommand(fileObj.framework);
-                        
+                      
                 }
                 else if(res.option === constants.EVENT) {
                     // Generate Event.
-                    let res = await prompt(constants.EVENT)
+                    console.log('yeeee')
+                    let res = await prompt(constants.EVENT);
                     await utils.addEventHandler(res.events, fileObj);
                 }
                 
@@ -50,6 +51,8 @@ async function checkArguments(arg) {
                 if(djsExists) {
                     let response = await prompt(constants.DEL)
                     console.log(response)
+                    let cmds = await utils.deleteCommand();
+                    await displayCommand(cmds)
                     // Display all of the user's commands.
                 }
                 else {

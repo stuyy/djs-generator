@@ -54,6 +54,7 @@ async function copyTemplates(opts) {
 }
 
 module.exports.addEventHandler = async function(events, fileObj) {
+    console.log(events)
     await asyncForEach(events, fs.writeFile, fs.access, fileObj);
 }
 
@@ -120,5 +121,32 @@ module.exports.generateCommandTemplate = async function(projectName, options) {
         
         obj.groups.push([`${options.group}`, `${options.group} commands`]);
         await fs.writeFile(path.join(CURRENT_DIR, 'djs.json'), JSON.stringify(obj, null, 4));
+    }
+}
+// Get all commands and return it
+module.exports.deleteCommand = async function() {
+    var cmds = []
+    await recursiveReaddir(path.join(CURRENT_DIR, 'commands'), cmds);
+    return cmds;
+}
+
+async function recursiveReaddir(dir, cmds) {
+    var files = await fs.readdir(dir);
+    if(files.length === 0)
+        return;
+    else {
+        await files.readdirAsync(dir, fs.lstat, cmds);
+    }
+}
+Array.prototype.readdirAsync = async function(dir, cb, cmds) {
+    for(var i = 0; i < this.length; i++) {
+        let stats = await cb(path.join(dir, this[i]));
+
+        if(stats.isDirectory()) {
+            await recursiveReaddir(path.join(dir, this[i]), cmds);
+        }
+        else {
+            cmds.push(this[i]);
+        }
     }
 }

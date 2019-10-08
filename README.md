@@ -3,6 +3,11 @@
 ## Installation
 
 `npm install -g discordjs-cli`
+<div align="center">
+    <a href="#"><img src="https://img.shields.io/discord/582319490122121247"></a>
+    <a href="#"><img src="https://img.shields.io/npm/v/discordjs-cli"></a>
+    <a href="#"><img src="https://img.shields.io/npm/dw/discordjs-cli"></a>
+</div>
 
 This is a simple tool to scaffold a Discord.JS bot.
 
